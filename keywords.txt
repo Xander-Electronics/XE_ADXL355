@@ -1,0 +1,39 @@
+#######################################
+# Syntax Coloring Map For XE_ADXL355
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+XE_ADXL355	KEYWORD1
+ADXL355	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+isReady	KEYWORD2
+setActivityThreshold	KEYWORD2
+setActivityAxes	KEYWORD2
+setActivityCount    KEYWORD2
+setRange	KEYWORD2
+start	KEYWORD2
+stop	KEYWORD2
+readAxes	KEYWORD2
+
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+ACTIVITY_X	LITERAL1
+ACTIVITY_Y	LITERAL1
+ACTIVITY_Z	LITERAL1
+
+RANGE_2G	LITERAL1
+RANGE_4G	LITERAL1
+RANGE_8G	LITERAL1

@@ -60,4 +60,20 @@
 #define ACTIVITY_Y                  1
 #define ACTIVITY_Z                  2
 
+#define ACT_EN2_POS                 7
+#define OVR_EN2_POS                 6
+#define FULL_EN2_POS                5
+#define RDY_EN2_POS                 4
+#define ACT_EN1_POS                 3
+#define OVR_EN1_POS                 2
+#define FULL_EN1_POS                1
+#define RDY_EN1_POS                 0
+
+#define INT_ACTIVITY                3
+#define INT_OVERFLOW                2
+#define INT_FIFOFULL                1
+#define INT_DATAREADY               0
+
+#define INT1                        0
+#define INT2                        1
 #endif

@@ -24,7 +24,7 @@ public:
   float readTemperature();
 
   void setActivityAxes(uint8_t activityMask);
-  void setActivityThreshold(uint16_t threshold);
+  void setActivityThreshold(int threshold);
   void setActivityCount(uint8_t count);
   void setActivityMask(uint8_t activityMask);
 
@@ -34,6 +34,10 @@ public:
 
   void start();
   void stop();
+
+  void enableInterrupt(uint8_t mask, int pinToAttach, bool intNumber, int polarity);
+
+  void getInterruptCause();
 
 private:
   void write8(uint8_t thisRegister, uint8_t thisValue, bool writeInOr = false);

@@ -5,8 +5,21 @@
 
 #include "XE_ADXL355.h"
 
+bool int1_flag, int2_flag;
+
+void _int1Function() {
+  int1_flag = true;
+}
+
+void _int2Function() {
+  int2_flag = true;
+}
+
 bool XE_ADXL355Class::begin(HardwareSPI &spi, int8_t drdyPin, int8_t rstPin, int8_t csPin, uint32_t bitrate) {
   _spi = &spi;
+
+  int1_flag = false;
+  int2_flag = false;
 
   if(drdyPin > 0) {
     _drdyPin = drdyPin;
@@ -95,7 +108,7 @@ bool XE_ADXL355Class::isReady(void) {
 float XE_ADXL355Class::readTemperature() {
   uint8_t temperatureArray[] = {0, 0};
   readMultipleData(ADXL355_TEMP2, 2, temperatureArray);
-  float t = ((temperatureArray[0] - ((temperatureArray[0] >> 4) << 4)) << 8) + temperatureArray[1];
+  float t = (((temperatureArray[0] - ((temperatureArray[0] >> 4) << 4)) << 8) + temperatureArray[1]) / 1.0;
   t = -(t - 1885.0) / 9.05 + 25.0 - 8.5;
   return t;
 }
@@ -104,9 +117,12 @@ void XE_ADXL355Class::setActivityMask(uint8_t activityMask) {
   write8(ADXL355_ACT_EN, activityMask, true);
 }
 
-void XE_ADXL355Class::setActivityThreshold(uint16_t threshold) {
-  write8(ADXL355_ACT_THRESH_H, (threshold >> 8) & 0xFF);
-  write8(ADXL355_ACT_THRESH_L, (threshold) & 0xFF);
+void XE_ADXL355Class::setActivityThreshold(int threshold) {
+  if (threshold > 0) {
+    write8(ADXL355_ACT_THRESH_H, (threshold) & 0xFF); 
+  } else {
+    write8(ADXL355_ACT_THRESH_L, (threshold) & 0xFF); 
+  }
 }
 
 void XE_ADXL355Class::setActivityCount(uint8_t count) {
@@ -190,4 +206,29 @@ float XE_ADXL355Class::rawToValue(uint32_t raw) {
 
   return x;
 }
+
+void XE_ADXL355Class::enableInterrupt(uint8_t mask, int pinToAttach, bool intNumber, int polarity) {
+  if (intNumber == INT1) {
+      uint8_t currentMask = readRegister(ADXL355_INT_MAP);
+      writeRegister(ADXL355_INT_MAP, currentMask | mask);
+      if(polarity == FALLING) {
+        attachInterrupt(digitalPinToInterrupt(pinToAttach), _int1Function, FALLING);
+      } else {
+        attachInterrupt(digitalPinToInterrupt(pinToAttach), _int1Function, RISING); 
+      }
+  } else {
+      uint8_t currentMask = readRegister(ADXL355_INT_MAP);
+      writeRegister(ADXL355_INT_MAP, (currentMask << 4) | mask);
+      if(polarity == FALLING) {
+        attachInterrupt(digitalPinToInterrupt(pinToAttach), _int2Function, FALLING);
+      } else {
+        attachInterrupt(digitalPinToInterrupt(pinToAttach), _int2Function, RISING); 
+      }
+  }
+}
+
+uint8 XE_ADXL355Class::getInterruptCause() {
+
+}
+
 XE_ADXL355Class ADXL355;

@@ -12,10 +12,6 @@ void setup() {
   }
 
   ADXL355.setRange(RANGE_2G);
-
-  //ADXL355.setActivityAxes(ACTIVITY_X | ACTIVITY_Y | ACTIVITY_Z);
-  //ADXL355.setActivityCount(3);
-  //ADXL355.setActivityThreshold();
   ADXL355.start();
 }
 

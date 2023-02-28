@@ -2,7 +2,7 @@
   ADXL 355 Library for Arduino
   Copyright (c) 2022 Xander Electronics. All right reserved.
 
-  Simple: Read X, Y, Z and Temperature using polling
+  Simple: Read X, Y, Z and Temperature using interrupt
 */
 
 #include <XE_ADXL355.h>
@@ -19,10 +19,17 @@ void setup() {
   }
 
   ADXL355.setRange(RANGE_2G);
+
+  ADXL355.setActivityAxes(ACTIVITY_X | ACTIVITY_Y | ACTIVITY_Z); //detect activity on X, Y or Z
+  ADXL355.setActivityCount(1); //generate interrupt after each event 
+  ADXL355.setActivityThreshold(127);  //1g
+  ADXL355.setActivityThreshold(-127); //-1g
+  ADXL355.enableInterrupt(INT_ACTIVITY, 10, INT1, FALLING); //enable interrupt on activity through INT1 of ADXL355
   ADXL355.start();
 }
 
 void loop() {
+  
   if (ADXL355.isReady()) {
     Serial.println("Temp = " + String(ADXL355.readTemperature()) + " *C");
     float data[] = {0, 0, 0};
